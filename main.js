@@ -22,7 +22,20 @@ var ball = {
 }
 
 function setup() {
-  var canvas = createCanvas(700, 600);
+  canvas = createCanvas(700, 600);
+  vid = createCapture(VIDEO);
+  vid.size(700, 600);
+  vid.hide();
+  var poseNet = ml5.poseNet(vid, modelLoaded);
+  poseNet.on('pose', gotPoses);
+}
+
+function modelLoaded() {
+  console.log("Model has been loaded");
+}
+
+function gotPoses(results) {
+  console.log(results);
 }
 
 
@@ -37,6 +50,8 @@ function draw() {
   fill("black");
   stroke("black");
   rect(0, 0, 20, 700);
+  
+  image(vid, 0, 0, 700, 600);
 
   //funtion paddleInCanvas call 
   paddleInCanvas();
@@ -65,6 +80,7 @@ function draw() {
 
   //function move call which in very important
   move();
+
 }
 
 
@@ -72,7 +88,7 @@ function draw() {
 //function reset when ball does notcame in the contact of padde
 function reset() {
   ball.x = width / 2 + 100,
-  ball.y = height / 2 + 100;
+    ball.y = height / 2 + 100;
   ball.dx = 3;
   ball.dy = 3;
 
