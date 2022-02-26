@@ -86,3 +86,17 @@ canvas {
 .close {
   color: white;
 }
+
+.footer {
+  color: white;
+  /* position to bottom of screen */
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  background-color: rgba(19, 19, 20, 0.651);
+  border: 1px solid white;
+  border-radius: 5px;
+  color: white;
+}
