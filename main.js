@@ -6,12 +6,16 @@ var paddle2 = 10, paddle1 = 10;
 var paddle1X = 10, paddle1Height = 110;
 var paddle2Y = 685, paddle2Height = 70;
 
+var rightWristX = 0, rightWristY = 0;
+var scoreRightWrist = 0;
+
 var score1 = 0, score2 = 0;
 var paddle1Y;
 
 var playerscore = 0;
 var audio1;
 var pcscore = 0;
+
 //ball x and y and speedx speed y and radius
 var ball = {
   x: 350 / 2,
@@ -35,7 +39,13 @@ function modelLoaded() {
 }
 
 function gotPoses(results) {
-  console.log(results);
+  if (results.length > 0){
+    rightWristX = results[0].pose.rightWrist.x;
+    rightWristY = results[0].pose.rightWrist.y;
+    scoreRightWrist = results[0].pose.keypoints[10].score;
+    console.log(scoreRightWrist);
+    // console.log(rightWristX, rightWristY);
+  }
 }
 
 
@@ -60,8 +70,16 @@ function draw() {
   fill(250, 0, 0);
   stroke(0, 0, 250);
   strokeWeight(0.5);
+  // paddle1Y = rightWristY;
   paddle1Y = mouseY;
   rect(paddle1X, paddle1Y, paddle1, paddle1Height, 100);
+
+
+  if ((scoreRightWrist*100) > 0.2) {
+    fill("red");
+    stroke("red");
+    circle(rightWristX, rightWristY, 30);
+  }
 
 
   //pc computer paddle
@@ -88,7 +106,7 @@ function draw() {
 //function reset when ball does notcame in the contact of padde
 function reset() {
   ball.x = width / 2 + 100,
-    ball.y = height / 2 + 100;
+  ball.y = height / 2 + 100;
   ball.dx = 3;
   ball.dy = 3;
 
