@@ -16,6 +16,8 @@ var playerscore = 0;
 var audio1;
 var pcscore = 0;
 
+var gameStarted = false;
+
 //ball x and y and speedx speed y and radius
 var ball = {
   x: 350 / 2,
@@ -23,6 +25,10 @@ var ball = {
   r: 20,
   dx: 3,
   dy: 3
+}
+
+function startGame() {
+  gameStarted = true;
 }
 
 function setup() {
@@ -39,7 +45,7 @@ function modelLoaded() {
 }
 
 function gotPoses(results) {
-  if (results.length > 0){
+  if (results.length > 0) {
     rightWristX = results[0].pose.rightWrist.x;
     rightWristY = results[0].pose.rightWrist.y;
     scoreRightWrist = results[0].pose.keypoints[10].score;
@@ -51,53 +57,59 @@ function gotPoses(results) {
 
 function draw() {
 
-  background(0);
+  if (gameStarted) {
+    background(0);
 
-  fill("black");
-  stroke("black");
-  rect(680, 0, 20, 700);
+    fill("black");
+    stroke("black");
+    rect(680, 0, 20, 700);
 
-  fill("black");
-  stroke("black");
-  rect(0, 0, 20, 700);
-  
-  image(vid, 0, 0, 700, 600);
+    fill("black");
+    stroke("black");
+    rect(0, 0, 20, 700);
 
-  //funtion paddleInCanvas call 
-  paddleInCanvas();
+    image(vid, 0, 0, 700, 600);
 
-  //left paddle
-  fill(250, 0, 0);
-  stroke(0, 0, 250);
-  strokeWeight(0.5);
-  // paddle1Y = rightWristY;
-  paddle1Y = mouseY;
-  rect(paddle1X, paddle1Y, paddle1, paddle1Height, 100);
+    //funtion paddleInCanvas call 
+    paddleInCanvas();
+
+    //left paddle
+    fill(250, 0, 0);
+    stroke(0, 0, 250);
+    strokeWeight(0.5);
+    // paddle1Y = rightWristY;
+    paddle1Y = mouseY;
+    rect(paddle1X, paddle1Y, paddle1, paddle1Height, 100);
 
 
-  if ((scoreRightWrist*100) > 0.2) {
-    fill("red");
-    stroke("red");
-    circle(rightWristX, rightWristY, 30);
+    if ((scoreRightWrist * 100) > 0.2) {
+      fill("red");
+      stroke("red");
+      circle(rightWristX, rightWristY, 30);
+    }
+
+
+    //pc computer paddle
+    fill("#FFA500");
+    stroke("#FFA500");
+    var paddle2y = ball.y - paddle2Height / 2; rect(paddle2Y, paddle2y, paddle2, paddle2Height, 100);
+
+    //function midline call
+    midline();
+
+    //funtion drawScore call 
+    drawScore();
+
+    //function models call  
+    models();
+
+    //function move call which in very important
+    move();
+  } else {
+    textSize(32);
+    fill(0, 102, 153);
+    text("Press [PLAY] to start the game", 125, 300);
   }
-
-
-  //pc computer paddle
-  fill("#FFA500");
-  stroke("#FFA500");
-  var paddle2y = ball.y - paddle2Height / 2; rect(paddle2Y, paddle2y, paddle2, paddle2Height, 100);
-
-  //function midline call
-  midline();
-
-  //funtion drawScore call 
-  drawScore();
-
-  //function models call  
-  models();
-
-  //function move call which in very important
-  move();
 
 }
 
@@ -106,7 +118,7 @@ function draw() {
 //function reset when ball does notcame in the contact of padde
 function reset() {
   ball.x = width / 2 + 100,
-  ball.y = height / 2 + 100;
+    ball.y = height / 2 + 100;
   ball.dx = 3;
   ball.dy = 3;
 
